@@ -1,0 +1,136 @@
+{
+  "info": {
+    "name": "Catalog Service",
+    "description": "Микросервис товаров (лампочек) и категорий. Базовый URL — {{base_url}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8001" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "url": { "raw": "{{base_url}}/health", "host": ["{{base_url}}"], "path": ["health"] } }
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List categories",
+          "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/categories", "host": ["{{base_url}}"], "path": ["api", "categories"] } }
+        },
+        {
+          "name": "Create category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Точечные\",\n  \"slug\": \"spotlights\"\n}" },
+            "url": { "raw": "{{base_url}}/api/categories", "host": ["{{base_url}}"], "path": ["api", "categories"] }
+          }
+        },
+        {
+          "name": "Update category",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"LED-светильники\"\n}" },
+            "url": { "raw": "{{base_url}}/api/categories/1", "host": ["{{base_url}}"], "path": ["api", "categories", "1"] }
+          }
+        },
+        {
+          "name": "Delete category",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/categories/5", "host": ["{{base_url}}"], "path": ["api", "categories", "5"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/products?limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"],
+              "query": [{ "key": "limit", "value": "20" }]
+            }
+          }
+        },
+        {
+          "name": "List by socket E27",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/products?socket_type=E27&sort=price&order=asc",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"],
+              "query": [
+                { "key": "socket_type", "value": "E27" },
+                { "key": "sort", "value": "price" },
+                { "key": "order", "value": "asc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get product by id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products/1", "host": ["{{base_url}}"], "path": ["api", "products", "1"] }
+          }
+        },
+        {
+          "name": "Create product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category_id\": 1,\n  \"name\": \"LED-лампа Премиум 15W E27\",\n  \"sku\": \"LED-E27-15P\",\n  \"description\": \"Премиальная LED-лампа\",\n  \"price\": 349.00,\n  \"stock\": 25,\n  \"power_watt\": 15,\n  \"socket_type\": \"E27\",\n  \"image_url\": null\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "Update product",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"price\": 199.00,\n  \"stock\": 150\n}" },
+            "url": { "raw": "{{base_url}}/api/products/1", "host": ["{{base_url}}"], "path": ["api", "products", "1"] }
+          }
+        },
+        {
+          "name": "Patch stock (+10)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"delta\": 10\n}" },
+            "url": { "raw": "{{base_url}}/api/products/1/stock", "host": ["{{base_url}}"], "path": ["api", "products", "1", "stock"] }
+          }
+        },
+        {
+          "name": "Patch stock (-2)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"delta\": -2\n}" },
+            "url": { "raw": "{{base_url}}/api/products/1/stock", "host": ["{{base_url}}"], "path": ["api", "products", "1", "stock"] }
+          }
+        },
+        {
+          "name": "Delete product",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/products/20", "host": ["{{base_url}}"], "path": ["api", "products", "20"] }
+          }
+        }
+      ]
+    }
+  ]
+}

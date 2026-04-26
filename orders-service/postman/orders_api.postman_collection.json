@@ -1,0 +1,153 @@
+{
+  "info": {
+    "name": "Orders Service",
+    "description": "Микросервис корзины и заказов. Базовый URL — {{base_url}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8002" },
+    { "key": "session_id", "value": "demo-session-1" },
+    { "key": "order_number", "value": "ORD-XXXXXXXXXX" },
+    { "key": "order_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "url": { "raw": "{{base_url}}/health", "host": ["{{base_url}}"], "path": ["health"] } }
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Create cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"session_id\": \"{{session_id}}\"\n}" },
+            "url": { "raw": "{{base_url}}/api/cart", "host": ["{{base_url}}"], "path": ["api", "cart"] }
+          }
+        },
+        {
+          "name": "Get cart",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/cart/{{session_id}}", "host": ["{{base_url}}"], "path": ["api", "cart", "{{session_id}}"] }
+          }
+        },
+        {
+          "name": "Add item (product 1, qty 2)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": 1,\n  \"quantity\": 2\n}" },
+            "url": { "raw": "{{base_url}}/api/cart/{{session_id}}/items", "host": ["{{base_url}}"], "path": ["api", "cart", "{{session_id}}", "items"] }
+          }
+        },
+        {
+          "name": "Add item (product 5, qty 1)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": 5,\n  \"quantity\": 1\n}" },
+            "url": { "raw": "{{base_url}}/api/cart/{{session_id}}/items", "host": ["{{base_url}}"], "path": ["api", "cart", "{{session_id}}", "items"] }
+          }
+        },
+        {
+          "name": "Patch item quantity",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"quantity\": 3\n}" },
+            "url": { "raw": "{{base_url}}/api/cart/{{session_id}}/items/1", "host": ["{{base_url}}"], "path": ["api", "cart", "{{session_id}}", "items", "1"] }
+          }
+        },
+        {
+          "name": "Delete cart item",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/cart/{{session_id}}/items/2", "host": ["{{base_url}}"], "path": ["api", "cart", "{{session_id}}", "items", "2"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create order from cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"customer_name\": \"Иван Шевцов\",\n  \"customer_phone\": \"+79991234567\",\n  \"customer_email\": \"jolymove@gmail.com\",\n  \"delivery_address\": \"г. Москва, ул. Тверская, д.1, кв.2\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/orders", "host": ["{{base_url}}"], "path": ["api", "orders"] }
+          }
+        },
+        {
+          "name": "List orders",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/orders", "host": ["{{base_url}}"], "path": ["api", "orders"] }
+          }
+        },
+        {
+          "name": "List orders (status=new)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/orders?status=new",
+              "host": ["{{base_url}}"],
+              "path": ["api", "orders"],
+              "query": [{ "key": "status", "value": "new" }]
+            }
+          }
+        },
+        {
+          "name": "Get order by number",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/orders/{{order_number}}", "host": ["{{base_url}}"], "path": ["api", "orders", "{{order_number}}"] }
+          }
+        },
+        {
+          "name": "Confirm order",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"confirmed\"\n}" },
+            "url": { "raw": "{{base_url}}/api/orders/{{order_id}}/status", "host": ["{{base_url}}"], "path": ["api", "orders", "{{order_id}}", "status"] }
+          }
+        },
+        {
+          "name": "Ship order",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"shipped\"\n}" },
+            "url": { "raw": "{{base_url}}/api/orders/{{order_id}}/status", "host": ["{{base_url}}"], "path": ["api", "orders", "{{order_id}}", "status"] }
+          }
+        },
+        {
+          "name": "Deliver order",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"delivered\"\n}" },
+            "url": { "raw": "{{base_url}}/api/orders/{{order_id}}/status", "host": ["{{base_url}}"], "path": ["api", "orders", "{{order_id}}", "status"] }
+          }
+        },
+        {
+          "name": "Cancel order (returns stock)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"cancelled\"\n}" },
+            "url": { "raw": "{{base_url}}/api/orders/{{order_id}}/status", "host": ["{{base_url}}"], "path": ["api", "orders", "{{order_id}}", "status"] }
+          }
+        }
+      ]
+    }
+  ]
+}
