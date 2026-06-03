@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "Admin Service API",
+    "description": "Панель управления: авторизация менеджера, управление товарами и заказами (шлюз к catalog и orders).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8003" },
+    { "key": "token", "value": "" },
+    { "key": "product_id", "value": "1" },
+    { "key": "order_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Auth: login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "if (json.access_token) { pm.collectionVariables.set('token', json.access_token); }"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "username", "value": "admin" },
+            { "key": "password", "value": "admin123" }
+          ]
+        },
+        "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+      }
+    },
+    {
+      "name": "Auth: me",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{base_url}}/api/auth/me", "host": ["{{base_url}}"], "path": ["api", "auth", "me"] }
+      }
+    },
+    {
+      "name": "Products: list",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{base_url}}/api/admin/products", "host": ["{{base_url}}"], "path": ["api", "admin", "products"] }
+      }
+    },
+    {
+      "name": "Products: create",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"category_id\": 1,\n  \"name\": \"LED-лампа Новая 11W E27\",\n  \"sku\": \"LED-E27-11N\",\n  \"price\": 219.00,\n  \"stock\": 30,\n  \"power_watt\": 11,\n  \"socket_type\": \"E27\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/admin/products", "host": ["{{base_url}}"], "path": ["api", "admin", "products"] }
+      }
+    },
+    {
+      "name": "Products: update",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"price\": 199.00,\n  \"stock\": 45\n}" },
+        "url": { "raw": "{{base_url}}/api/admin/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api", "admin", "products", "{{product_id}}"] }
+      }
+    },
+    {
+      "name": "Products: delete",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{base_url}}/api/admin/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api", "admin", "products", "{{product_id}}"] }
+      }
+    },
+    {
+      "name": "Orders: list",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{base_url}}/api/admin/orders?status=new",
+          "host": ["{{base_url}}"],
+          "path": ["api", "admin", "orders"],
+          "query": [{ "key": "status", "value": "new" }]
+        }
+      }
+    },
+    {
+      "name": "Orders: change status",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"status\": \"confirmed\"\n}" },
+        "url": { "raw": "{{base_url}}/api/admin/orders/{{order_id}}/status", "host": ["{{base_url}}"], "path": ["api", "admin", "orders", "{{order_id}}", "status"] }
+      }
+    }
+  ]
+}

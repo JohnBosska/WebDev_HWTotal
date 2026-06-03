@@ -5,9 +5,12 @@ from .config import settings
 
 
 def _client() -> httpx.Client:
+    # trust_env=False — вызов catalog-service идёт напрямую по docker-сети,
+    # системные HTTP(S)_PROXY/NO_PROXY игнорируем.
     return httpx.Client(
         base_url=settings.catalog_service_url,
         timeout=settings.catalog_request_timeout,
+        trust_env=False,
     )
 
 

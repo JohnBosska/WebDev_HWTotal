@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💡 Магазин лампочек</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <strong class="logo">💡 Магазин лампочек</strong>
+    <div class="filters">
+      <select id="category-filter">
+        <option value="">Все категории</option>
+      </select>
+    </div>
+    <button id="cart-btn" class="cart-btn">
+      🛒 Корзина <span id="cart-count" class="count">0</span>
+    </button>
+  </header>
+
+  <main>
+    <div id="catalog-msg" class="msg"></div>
+    <section id="catalog" class="catalog"></section>
+  </main>
+
+  <!-- Боковая корзина -->
+  <aside id="cart-drawer" class="drawer" hidden>
+    <div class="drawer-head">
+      <h2>Корзина</h2>
+      <button id="cart-close" class="ghost">✕</button>
+    </div>
+
+    <div id="cart-items" class="cart-items"></div>
+
+    <div class="cart-summary">
+      <span>Итого:</span>
+      <strong id="cart-total">0 ₽</strong>
+    </div>
+
+    <button id="checkout-btn" class="primary wide" disabled>Оформить заказ</button>
+
+    <!-- Форма оформления -->
+    <form id="checkout-form" class="checkout" hidden>
+      <h3>Данные доставки</h3>
+      <label>Имя<input id="c-name" required maxlength="200" /></label>
+      <label>Телефон<input id="c-phone" required maxlength="20" placeholder="+7…" /></label>
+      <label>Email<input id="c-email" type="email" required maxlength="100" /></label>
+      <label>Адрес доставки<textarea id="c-address" rows="2" required></textarea></label>
+      <p id="checkout-error" class="error"></p>
+      <div class="checkout-actions">
+        <button type="button" id="checkout-back" class="ghost">Назад</button>
+        <button type="submit" class="primary">Подтвердить заказ</button>
+      </div>
+    </form>
+  </aside>
+
+  <div id="overlay" class="overlay" hidden></div>
+
+  <!-- Экран успешного заказа -->
+  <div id="success-modal" class="modal" hidden>
+    <div class="modal-card success">
+      <div class="check">✓</div>
+      <h3>Заказ оформлен!</h3>
+      <p>Номер вашего заказа:</p>
+      <p class="order-number" id="success-number"></p>
+      <p class="muted">Менеджер свяжется с вами для подтверждения.</p>
+      <button id="success-ok" class="primary wide">Отлично</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

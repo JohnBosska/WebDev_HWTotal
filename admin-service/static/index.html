@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Панель управления — Магазин лампочек</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- Экран входа -->
+  <section id="login-view" class="login-view">
+    <form id="login-form" class="login-card">
+      <h1>Панель управления</h1>
+      <p class="muted">Вход для менеджера</p>
+      <label>Логин
+        <input id="login-username" type="text" autocomplete="username" required />
+      </label>
+      <label>Пароль
+        <input id="login-password" type="password" autocomplete="current-password" required />
+      </label>
+      <button type="submit">Войти</button>
+      <p id="login-error" class="error"></p>
+      <p class="hint">По умолчанию: <code>admin / admin123</code></p>
+    </form>
+  </section>
+
+  <!-- Основное приложение -->
+  <div id="app-view" class="app-view" hidden>
+    <header class="topbar">
+      <strong>🔧 Панель управления</strong>
+      <nav>
+        <button class="tab-btn active" data-tab="products">Товары</button>
+        <button class="tab-btn" data-tab="orders">Заказы</button>
+      </nav>
+      <div class="topbar-right">
+        <span id="who" class="muted"></span>
+        <button id="logout-btn" class="ghost">Выйти</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Товары -->
+      <section id="tab-products" class="tab">
+        <div class="toolbar">
+          <h2>Товары</h2>
+          <button id="new-product-btn">+ Добавить товар</button>
+        </div>
+        <div id="products-msg" class="msg"></div>
+        <table class="grid">
+          <thead>
+            <tr>
+              <th>ID</th><th>Название</th><th>SKU</th><th>Категория</th>
+              <th>Цена</th><th>Остаток</th><th>Цоколь</th><th>Вт</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="products-body"></tbody>
+        </table>
+      </section>
+
+      <!-- Заказы -->
+      <section id="tab-orders" class="tab" hidden>
+        <div class="toolbar">
+          <h2>Заказы</h2>
+          <select id="orders-filter">
+            <option value="">Все статусы</option>
+            <option value="new">new</option>
+            <option value="confirmed">confirmed</option>
+            <option value="shipped">shipped</option>
+            <option value="delivered">delivered</option>
+            <option value="cancelled">cancelled</option>
+          </select>
+        </div>
+        <div id="orders-msg" class="msg"></div>
+        <table class="grid">
+          <thead>
+            <tr>
+              <th>Номер</th><th>Клиент</th><th>Телефон</th>
+              <th>Сумма</th><th>Статус</th><th>Состав</th><th>Сменить статус</th>
+            </tr>
+          </thead>
+          <tbody id="orders-body"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- Модалка товара -->
+  <div id="product-modal" class="modal" hidden>
+    <form id="product-form" class="modal-card">
+      <h3 id="product-modal-title">Товар</h3>
+      <input type="hidden" id="p-id" />
+      <label>Название<input id="p-name" required maxlength="200" /></label>
+      <label>SKU<input id="p-sku" required maxlength="50" /></label>
+      <label>Категория
+        <select id="p-category" required></select>
+      </label>
+      <div class="row">
+        <label>Цена, ₽<input id="p-price" type="number" min="0" step="0.01" required /></label>
+        <label>Остаток<input id="p-stock" type="number" min="0" step="1" value="0" required /></label>
+      </div>
+      <div class="row">
+        <label>Мощность, Вт<input id="p-watt" type="number" min="0" step="1" /></label>
+        <label>Цоколь<input id="p-socket" maxlength="20" placeholder="E27" /></label>
+      </div>
+      <label>Ссылка на картинку<input id="p-image" maxlength="500" placeholder="https://…" /></label>
+      <label>Описание<textarea id="p-description" rows="3"></textarea></label>
+      <p id="product-form-error" class="error"></p>
+      <div class="modal-actions">
+        <button type="button" class="ghost" id="product-cancel">Отмена</button>
+        <button type="submit">Сохранить</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
